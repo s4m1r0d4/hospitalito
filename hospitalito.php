@@ -2,8 +2,8 @@
 
 session_start();
 
-if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] != true
-    || isset($_GET["cerrar_sesion"])) {
+if (isset($_SESSION['loggedin']) and $_SESSION['loggedin'] != true
+    or isset($_GET["cerrar_sesion"])) {
     $_SESSION['loggedin'] = false;
     header("location: inicio.php");
     exit;
@@ -14,7 +14,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] != true
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Página principal</title>
+    <title>Página principal</title>
 </head>
 <body>
     <h1>Hospitalito</h1>

@@ -56,6 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     echo '<div style="color:#4acb30";>Ingreso exitoso</div>';
     header("location: inicio.php");
+
     end:
     unset($stmt);
     unset($pdo);
@@ -65,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Inicio de sesión</title>
+    <title>Inicio de sesión</title>
 </head>
 <body>
     <center>
@@ -75,11 +76,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h2>Ingreso</h2>
         <p>Introduzca su usuario y contraseña</p><br><br>
 
-        <?php 
+        <?php
         if(!empty($error)){
             echo '<div class="alert alert-danger" style="color:#FF0000";>'
                 . $error. '</div> <br>';
-        }        
+        }
         ?>
 
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>"
