@@ -1,7 +1,7 @@
 <?php
 
 if (session_status() === PHP_SESSION_NONE) session_start();
-
+session_unset();
 require_once "conexionbd.php";
 
 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
@@ -47,11 +47,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $_SESSION["usuario"]     = $usuario;
     $_SESSION["privilegios"] = $row["privilegios"];
 
-    echo 'Ingreso exitoso';
     header("location: tablas.php");
 
     end:
-    if(!empty($error)){
+    if (!empty($error)) {
         echo $error;
     }
 }
