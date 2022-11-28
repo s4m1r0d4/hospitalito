@@ -30,7 +30,6 @@ if (isset($_GET['id']) && isset($_GET['tabla'])){
         } catch (Exception $e) {
             die($e->getMessage());
         }
-        echo 'elimina you puto';
     }
 
     header("Location: $tabla.php");

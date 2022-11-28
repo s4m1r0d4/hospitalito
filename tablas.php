@@ -4,7 +4,6 @@
         or isset($_GET["cerrar_sesion"])) {
         $_SESSION['loggedin'] = false;
         header("location: inicio.php");
-        echo 'youputo';
     }
 ?>
 <?php include ("includes/header.php"); ?>
