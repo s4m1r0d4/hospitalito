@@ -17,10 +17,14 @@
             <div class="container">
                 <a class="navbar-brand" href="tablas.php">Hospitalito</a>
             </div>
-            <div>
-                <form method="get">
-                    <input type="submit" name="cerrar_sesion"
-                        value="Cerrar sesión" />
-                </form>
-            </div>
+            <?php
+            if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
+                echo '<div>';
+                echo '    <form method="get">';
+                echo '        <input type="submit" name="cerrar_sesion"';
+                echo '            value="Cerrar sesión" />';
+                echo '    </form>';
+                echo '</div>';
+            }
+            ?>
         </nav>
