@@ -1,8 +1,16 @@
 <?php
+    if (session_status() === PHP_SESSION_NONE) session_start();
+    if (!isset($_SESSION['loggedin']) or $_SESSION['loggedin'] != true
+        or isset($_GET["cerrar_sesion"])) {
+        $_SESSION['loggedin'] = false;
+        header("location: inicio.php");
+        exit;
+    }
+?>
+<?php
 include("conexionbd.php");
 
-
-if  (isset($_GET['id'])) {
+if (isset($_GET['id'])) {
     $id = $_GET['id'];
     $sql = "SELECT * FROM sala WHERE id_sala=$id";
     $res = mysqli_query($conexion, $sql);
@@ -10,18 +18,14 @@ if  (isset($_GET['id'])) {
     $nombre = $fila['NOMBRE'];
 }
 
-
 if (isset($_POST['actualizacion'])) {
   $id = $_GET['id'];
     $nombre= $_POST['sala'];
-
     $sql = "UPDATE sala set nombre = '$nombre' WHERE id_sala=$id";
     mysqli_query($conexion, $sql) or die ("No se realizó correctamente la actualizacion de los datos");
     header('Location: sala.php');
 }
-
 ?>
-
 <?php include('includes/header.php'); ?>
   <div class="container p-4">
     <div class="row">
@@ -41,5 +45,4 @@ if (isset($_POST['actualizacion'])) {
       </div>
     </div>
   </div>
-
 <?php include('includes/footer.php'); ?>

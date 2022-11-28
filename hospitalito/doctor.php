@@ -1,3 +1,12 @@
+<?php
+    if (session_status() === PHP_SESSION_NONE) session_start();
+    if (!isset($_SESSION['loggedin']) or $_SESSION['loggedin'] != true
+        or isset($_GET["cerrar_sesion"])) {
+        $_SESSION['loggedin'] = false;
+        header("location: inicio.php");
+        exit;
+    }
+?>
 <?php include("conexionbd.php"); ?>
 
 <?php include('includes/header.php'); ?>
@@ -28,13 +37,13 @@
           <div class="form-group">
             <?php
              $sql = "SELECT * FROM especialidad";
-             $tabla = mysqli_query($conexion, $sql); ?>  
-             Especialidad: <SELECT NAME="especialidad_doctor"> 
+             $tabla = mysqli_query($conexion, $sql); ?>
+             Especialidad: <SELECT NAME="especialidad_doctor">
              <?php  while($mostrar=mysqli_fetch_array($tabla)){   ?>
                 <OPTION VALUE= <?php echo $mostrar['id_especialidad'] ?> SELECTED><?php echo $mostrar['nombre']?>
              <?php }?>
             </SELECT>
-            
+
           </div>
 
           <div class="form-check">
@@ -68,7 +77,7 @@
 
           <?php
           $sql = "select id_doctor,doctor.nombre, apep, apem, sexo, domicilio,fechana,celular,especialidad.nombre as especialidad from doctor inner join especialidad on doctor.id_especialidad=especialidad.id_especialidad";
-          $tabla = mysqli_query($conexion, $sql);    
+          $tabla = mysqli_query($conexion, $sql);
 
           while($mostrar = mysqli_fetch_array($tabla)) { ?>
           <tr>

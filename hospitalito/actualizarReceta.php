@@ -1,9 +1,16 @@
 <?php
+    if (session_status() === PHP_SESSION_NONE) session_start();
+    if (!isset($_SESSION['loggedin']) or $_SESSION['loggedin'] != true
+        or isset($_GET["cerrar_sesion"])) {
+        $_SESSION['loggedin'] = false;
+        header("location: inicio.php");
+        exit;
+    }
+?>
+<?php
 include("conexionbd.php");
 
-
-
-if  (isset($_GET['id'])) {
+if (isset($_GET['id'])) {
     $id = $_GET['id'];
     $sql = "SELECT * FROM receta WHERE id_receta=$id";
     $res = mysqli_query($conexion, $sql);
@@ -14,9 +21,7 @@ if  (isset($_GET['id'])) {
     $fechafin= $fila['fechafin'];
     $dosis= $fila['dosis'];
 
-
 }
-
 
 if (isset($_POST['actualizacion'])) {
     $id = $_GET['id'];
@@ -25,14 +30,11 @@ if (isset($_POST['actualizacion'])) {
     $fechaini= $_REQUEST['fechaini_receta'];
     $fechafin= $_REQUEST['fechafin_receta'];
     $dosis= $_REQUEST['dosis'];
-
     $sql = "UPDATE receta set id_paciente='$paciente', id_medicamento='$medicamento', fechaini='$fechaini', fechafin='$fechafin', dosis='$dosis' where id_receta=$id";
-    mysqli_query($conexion, $sql) or die ("No se realizó correctamente la actualizacion de los datos");;
+    mysqli_query($conexion, $sql) or die ("No se realizó correctamente la actualizacion de los datos");
     header('Location: receta.php');
 }
-
 ?>
-
 <?php include('includes/header.php'); ?>
   <div class="container p-4">
     <div class="row">
@@ -47,8 +49,8 @@ if (isset($_POST['actualizacion'])) {
              $obtenerNombre="select id_paciente,concat(paciente.nombre,' ',paciente.apep,' ',paciente.apem) as paciente from paciente where id_paciente=$paciente";
              $nombrePaciente=mysqli_query($conexion,$obtenerNombre);
              $nombrePaciente=mysqli_fetch_array($nombrePaciente);
-              ?>  
-             Paciente: <SELECT NAME="paciente_receta"> 
+              ?>
+             Paciente: <SELECT NAME="paciente_receta">
               <OPTION VALUE= <?php echo $paciente ?> SELECTED><?php echo $nombrePaciente['paciente']?>
              <?php  while($mostrar=mysqli_fetch_array($tabla)){   ?>
                 <OPTION VALUE= <?php echo $mostrar['id_paciente'] ?> ><?php echo $mostrar['paciente']?>
@@ -58,14 +60,13 @@ if (isset($_POST['actualizacion'])) {
           <div class="form-group">
             <?php
              $sql = "select * from medicamento where id_medicamento>$medicamento or id_medicamento<$medicamento";
-             $tabla = mysqli_query($conexion, $sql); 
+             $tabla = mysqli_query($conexion, $sql);
              //Obtener nombre del medicamento ingresado anteriormente
-
              $obtenerNombre="select *from medicamento where id_medicamento=$medicamento";
              $nombreMedicamento=mysqli_query($conexion,$obtenerNombre);
              $nombreMedicamento=mysqli_fetch_array($nombreMedicamento);
-             ?>  
-             Medicamento: <SELECT NAME="medicamento_receta"> 
+             ?>
+             Medicamento: <SELECT NAME="medicamento_receta">
               <OPTION VALUE= <?php echo $paciente ?> SELECTED><?php echo $nombreMedicamento['nombre']?>
              <?php  while($mostrar=mysqli_fetch_array($tabla)){   ?>
                 <OPTION VALUE= <?php echo $mostrar['id_medicamento'] ?> ><?php echo $mostrar['nombre']?>
@@ -89,5 +90,4 @@ if (isset($_POST['actualizacion'])) {
       </div>
     </div>
   </div>
-
 <?php include('includes/footer.php'); ?>

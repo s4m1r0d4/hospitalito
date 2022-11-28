@@ -1,9 +1,17 @@
 <?php
+    if (session_status() === PHP_SESSION_NONE) session_start();
+    if (!isset($_SESSION['loggedin']) or $_SESSION['loggedin'] != true
+        or isset($_GET["cerrar_sesion"])) {
+        $_SESSION['loggedin'] = false;
+        header("location: inicio.php");
+        exit;
+    }
+?>
+<?php
+
 include("conexionbd.php");
 
-
-
-if  (isset($_GET['id'])) {
+if (isset($_GET['id'])) {
     $id = $_GET['id'];
     $sql = "SELECT * FROM cirugia WHERE id_cirugia=$id";
     $res = mysqli_query($conexion, $sql);
@@ -12,10 +20,7 @@ if  (isset($_GET['id'])) {
     $doctor= $fila['id_doctor'];
     $fechaini= $fila['fechaini'];
     $sala= $fila['id_sala'];
-
-
 }
-
 
 if (isset($_POST['actualizacion'])) {
     $id = $_GET['id'];
@@ -23,12 +28,10 @@ if (isset($_POST['actualizacion'])) {
     $doctor= $_REQUEST['doctor_cirugia'];
     $fechaini= $_REQUEST['fechaini_cirugia'];
     $sala= $_REQUEST['sala_cirugia'];
-
     $sql = "UPDATE cirugia set id_paciente='$paciente', id_doctor='$doctor', fechaini='$fechaini', id_sala='$sala' where id_cirugia=$id";
     mysqli_query($conexion, $sql) or die ("No se realizó correctamente la actualizacion de los datos");
     header('Location: cirugia.php');
 }
-
 ?>
 
 <?php include('includes/header.php'); ?>
@@ -45,8 +48,8 @@ if (isset($_POST['actualizacion'])) {
              $obtenerNombre="select id_paciente,concat(paciente.nombre,' ',paciente.apep,' ',paciente.apem) as paciente from paciente where id_paciente=$paciente";
              $nombrePaciente=mysqli_query($conexion,$obtenerNombre);
              $nombrePaciente=mysqli_fetch_array($nombrePaciente);
-              ?>  
-             Paciente: <SELECT NAME="paciente_cirugia"> 
+              ?>
+             Paciente: <SELECT NAME="paciente_cirugia">
               <OPTION VALUE= <?php echo $paciente ?> SELECTED><?php echo $nombrePaciente['paciente']?>
              <?php  while($mostrar=mysqli_fetch_array($tabla)){   ?>
                 <OPTION VALUE= <?php echo $mostrar['id_paciente'] ?> ><?php echo $mostrar['paciente']?>
@@ -61,8 +64,8 @@ if (isset($_POST['actualizacion'])) {
              $obtenerNombre="select id_doctor,concat(doctor.nombre,' ',doctor.apep,' ',doctor.apem) as doctor from doctor where id_doctor=$doctor";
              $nombreDoctor=mysqli_query($conexion,$obtenerNombre);
              $nombreDoctor=mysqli_fetch_array($nombreDoctor);
-              ?>  
-             Doctor: <SELECT NAME="doctor_cirugia"> 
+              ?>
+             Doctor: <SELECT NAME="doctor_cirugia">
               <OPTION VALUE= <?php echo $doctor ?> SELECTED><?php echo $nombreDoctor['doctor']?>
              <?php  while($mostrar=mysqli_fetch_array($tabla)){   ?>
                 <OPTION VALUE= <?php echo $mostrar['id_doctor'] ?> ><?php echo $mostrar['doctor']?>
@@ -72,14 +75,13 @@ if (isset($_POST['actualizacion'])) {
           <div class="form-group">
             <?php
              $sql = "select * from sala where id_sala>$sala or id_sala<$sala";
-             $tabla = mysqli_query($conexion, $sql); 
+             $tabla = mysqli_query($conexion, $sql);
              //Obtener nombre de la sala ingresada anteriormente
-
              $obtenerNombre="select *from sala where id_sala=$sala";
              $nombreSala=mysqli_query($conexion,$obtenerNombre);
              $nombreSala=mysqli_fetch_array($nombreSala);
-             ?>  
-             Sala: <SELECT NAME="sala_cirugia"> 
+             ?>
+             Sala: <SELECT NAME="sala_cirugia">
               <OPTION VALUE= <?php echo $sala ?> SELECTED><?php echo $nombreSala['NOMBRE']?>
              <?php  while($mostrar=mysqli_fetch_array($tabla)){   ?>
                 <OPTION VALUE= <?php echo $mostrar['id_sala'] ?> ><?php echo $mostrar['NOMBRE']?>
@@ -97,5 +99,4 @@ if (isset($_POST['actualizacion'])) {
       </div>
     </div>
   </div>
-
 <?php include('includes/footer.php'); ?>

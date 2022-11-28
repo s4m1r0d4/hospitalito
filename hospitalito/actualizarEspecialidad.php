@@ -1,4 +1,13 @@
 <?php
+    if (session_status() === PHP_SESSION_NONE) session_start();
+    if (!isset($_SESSION['loggedin']) or $_SESSION['loggedin'] != true
+        or isset($_GET["cerrar_sesion"])) {
+        $_SESSION['loggedin'] = false;
+        header("location: inicio.php");
+        exit;
+    }
+?>
+<?php
 include("conexionbd.php");
 $nombre = '';
 

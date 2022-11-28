@@ -1,3 +1,12 @@
+<?php
+    if (session_status() === PHP_SESSION_NONE) session_start();
+    if (!isset($_SESSION['loggedin']) or $_SESSION['loggedin'] != true
+        or isset($_GET["cerrar_sesion"])) {
+        $_SESSION['loggedin'] = false;
+        header("location: inicio.php");
+        exit;
+    }
+?>
 <?php include("conexionbd.php"); ?>
 
 <?php include('includes/header.php'); ?>
@@ -10,8 +19,8 @@
           <div class="form-group">
             <?php
              $sql = "select id_paciente,concat(paciente.nombre,' ',paciente.apep,' ',paciente.apem) as paciente from paciente";
-             $tabla = mysqli_query($conexion, $sql); ?>  
-             Paciente: <SELECT NAME="paciente_receta"> 
+             $tabla = mysqli_query($conexion, $sql); ?>
+             Paciente: <SELECT NAME="paciente_receta">
              <?php  while($mostrar=mysqli_fetch_array($tabla)){   ?>
                 <OPTION VALUE= <?php echo $mostrar['id_paciente'] ?> SELECTED><?php echo $mostrar['paciente']?>
              <?php }?>
@@ -20,8 +29,8 @@
           <div class="form-group">
             <?php
              $sql = "select * from medicamento";
-             $tabla = mysqli_query($conexion, $sql); ?>  
-             Medicamento: <SELECT NAME="medicamento_receta"> 
+             $tabla = mysqli_query($conexion, $sql); ?>
+             Medicamento: <SELECT NAME="medicamento_receta">
              <?php  while($mostrar=mysqli_fetch_array($tabla)){   ?>
                 <OPTION VALUE= <?php echo $mostrar['id_medicamento'] ?> SELECTED><?php echo $mostrar['nombre']?>
              <?php }?>
@@ -36,7 +45,7 @@
           <div class="form-group">
             <input type="number" name="dosis" class="form-control" placeholder="Dosis" maxlength="5" required>
           </div>
-      
+
 
           <input type="submit" name="tabla" class="btn btn-success btn-block" value="Registrar Receta">
         </form>
@@ -59,7 +68,7 @@
 
           <?php
           $sql = "select id_receta,concat(paciente.nombre,' ',paciente.apep,' ',paciente.apem) as paciente,medicamento.nombre as medicamento,dosis,fechaini,fechafin from receta inner join paciente on receta.id_paciente=paciente.id_paciente inner join medicamento on receta.id_medicamento=medicamento.id_medicamento";
-          $tabla = mysqli_query($conexion, $sql);    
+          $tabla = mysqli_query($conexion, $sql);
 
           while($mostrar = mysqli_fetch_array($tabla)) { ?>
           <tr>

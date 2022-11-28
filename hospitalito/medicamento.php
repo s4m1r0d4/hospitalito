@@ -1,3 +1,12 @@
+<?php
+    if (session_status() === PHP_SESSION_NONE) session_start();
+    if (!isset($_SESSION['loggedin']) or $_SESSION['loggedin'] != true
+        or isset($_GET["cerrar_sesion"])) {
+        $_SESSION['loggedin'] = false;
+        header("location: inicio.php");
+        exit;
+    }
+?>
 <?php include("conexionbd.php"); ?>
 
 <?php include('includes/header.php'); ?>
@@ -27,7 +36,7 @@
 
           <?php
           $sql = "SELECT * FROM medicamento";
-          $tabla = mysqli_query($conexion, $sql);    
+          $tabla = mysqli_query($conexion, $sql);
 
           while($mostrar = mysqli_fetch_array($tabla)) { ?>
           <tr>

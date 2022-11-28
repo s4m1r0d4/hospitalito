@@ -1,3 +1,12 @@
+<?php
+    if (session_status() === PHP_SESSION_NONE) session_start();
+    if (!isset($_SESSION['loggedin']) or $_SESSION['loggedin'] != true
+        or isset($_GET["cerrar_sesion"])) {
+        $_SESSION['loggedin'] = false;
+        header("location: inicio.php");
+        exit;
+    }
+?>
 <?php include("conexionbd.php"); ?>
 
 <?php include('includes/header.php'); ?>
@@ -10,8 +19,8 @@
           <div class="form-group">
             <?php
              $sql = "select id_paciente,concat(paciente.nombre,' ',paciente.apep,' ',paciente.apem) as paciente from paciente";
-             $tabla = mysqli_query($conexion, $sql); ?>  
-             Paciente: <SELECT NAME="paciente_cirugia"> 
+             $tabla = mysqli_query($conexion, $sql); ?>
+             Paciente: <SELECT NAME="paciente_cirugia">
              <?php  while($mostrar=mysqli_fetch_array($tabla)){   ?>
                 <OPTION VALUE= <?php echo $mostrar['id_paciente'] ?> SELECTED><?php echo $mostrar['paciente']?>
              <?php }?>
@@ -20,8 +29,8 @@
           <div class="form-group">
             <?php
              $sql = "select id_doctor,concat(doctor.nombre,' ',doctor.apep,' ',doctor.apem) as doctor from doctor";
-             $tabla = mysqli_query($conexion, $sql); ?>  
-             Doctor: <SELECT NAME="doctor_cirugia"> 
+             $tabla = mysqli_query($conexion, $sql); ?>
+             Doctor: <SELECT NAME="doctor_cirugia">
              <?php  while($mostrar=mysqli_fetch_array($tabla)){   ?>
                 <OPTION VALUE= <?php echo $mostrar['id_doctor'] ?> SELECTED><?php echo $mostrar['doctor']?>
              <?php }?>
@@ -30,8 +39,8 @@
           <div class="form-group">
             <?php
              $sql = "select * from sala";
-             $tabla = mysqli_query($conexion, $sql); ?>  
-             Sala: <SELECT NAME="sala_cirugia"> 
+             $tabla = mysqli_query($conexion, $sql); ?>
+             Sala: <SELECT NAME="sala_cirugia">
              <?php  while($mostrar=mysqli_fetch_array($tabla)){   ?>
                 <OPTION VALUE= <?php echo $mostrar['id_sala'] ?> SELECTED><?php echo $mostrar['NOMBRE']?>
              <?php }?>
@@ -39,7 +48,7 @@
           </div>
           <div class="form-group">
             Fecha de inicio: <input type="datetime-local" name="fechaini_cirugia" class="form-control" placeholder="Fecha de inicio" required>
-          </div>      
+          </div>
 
           <input type="submit" name="tabla" class="btn btn-success btn-block" value="Registrar Cirugia">
         </form>
@@ -61,7 +70,7 @@
 
           <?php
           $sql = " select id_cirugia, concat(paciente.nombre,' ',paciente.apep,' ',paciente.apem) as paciente, concat(doctor.nombre,' ',doctor.apep,' ',doctor.apem)as doctor, sala.nombre as sala, fechaini from cirugia inner join paciente on cirugia.id_paciente=paciente.id_paciente inner join doctor on cirugia.id_doctor=doctor.id_doctor inner join sala on cirugia.id_sala=sala.id_sala;";
-          $tabla = mysqli_query($conexion, $sql);    
+          $tabla = mysqli_query($conexion, $sql);
 
           while($mostrar = mysqli_fetch_array($tabla)) { ?>
           <tr>

@@ -1,27 +1,36 @@
 <?php
+    if (session_status() === PHP_SESSION_NONE) session_start();
+    if (!isset($_SESSION['loggedin']) or $_SESSION['loggedin'] != true
+        or isset($_GET["cerrar_sesion"])) {
+        $_SESSION['loggedin'] = false;
+        header("location: inicio.php");
+        exit;
+    }
+?>
+
+<?php
 
 include("conexionbd.php");
 
-session_start();
-
-if(isset($_GET['id']) && isset($_GET['tabla'])){
-    $_SESSION['id'] = $_GET['id'];
+if (isset($_GET['id']) && isset($_GET['tabla'])){
+    $_SESSION['id']    = $_GET['id'];
     $_SESSION['tabla'] = $_GET['tabla'];
-} else if(isset($_GET['op'])) {
-    $tabla = $_SESSION['tabla'];
+} else if (isset($_GET['op'])) {
     $id    = $_SESSION['id'];
+    $tabla = $_SESSION['tabla'];
 
-    if($_GET['op'] != 'si' or !isset($_SESSION['tabla'])
-        or !isset($_SESSION['id'])) {
-        header("Location: $tabla.php");
+    if (!isset($_SESSION['tabla']) or !isset($_SESSION['id'])) {
+        header("Location: tablas.php");
     }
-    $sql   = "DELETE FROM $tabla WHERE id_$tabla = $id";
-    echo $sql;
 
-    try {
-        $result = mysqli_query($conexion, $sql);
-    } catch (Exception $e) {
-        die($e->getMessage());
+    if ($_GET['op'] === 'si') {
+        $sql = "DELETE FROM $tabla WHERE id_$tabla = $id";
+        try {
+            $result = mysqli_query($conexion, $sql);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+        echo 'elimina you puto';
     }
 
     header("Location: $tabla.php");
@@ -43,8 +52,8 @@ if(isset($_GET['id']) && isset($_GET['tabla'])){
         </div>
 
         <div>
-            <input type="radio" id="no" name="op" value="no">
-            <label for="no">Si</label>
+            <input type="radio" id="si" name="op" value="si">
+            <label for="si">Si</label>
         </div>
 
             <input type="submit" value="Enviar">
