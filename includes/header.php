@@ -19,6 +19,20 @@
             </div>
             <?php
             if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
+                $conexion = mysqli_connect("localhost","root","","hospitalito")
+                    or die ("No se ha podido conectar  al servidor de la base de datos");
+
+                $db = mysqli_select_db($conexion, "hospitalito")
+                    or die("No se ha podido conectar con la base de datos");
+                // Encontrar el nombre de usuario
+                $id = $_SESSION['id_cuenta'];
+                $sql = "SELECT usuario FROM cuenta WHERE id_cuenta = $id";
+                $res = mysqli_query($conexion, $sql);
+                $row = $res->fetch_array(MYSQLI_ASSOC);
+                $usuario = $row['usuario'];
+
+
+                echo '<h4 style="color:white;">' . $usuario . '</h4>&nbsp;';
                 echo '<div>';
                 echo '    <form method="get">';
                 echo '        <input type="submit" name="cerrar_sesion"';
